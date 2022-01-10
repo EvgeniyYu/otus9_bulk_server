@@ -11,7 +11,7 @@ void CommandQueue::push_back(const std::string& str)
 {
     {
         std::unique_lock<std::mutex> lk(mx_ready_rw);
-		queue.push(str);
+        queue.push(str);
     }
     cv.notify_all();
 }
@@ -20,12 +20,12 @@ void CommandQueue::push_back(const std::string& str)
 void CommandQueue::get_front(std::string& str)
 {
     {
-		std::unique_lock<std::mutex> lk(mx_ready_rw);
-		if (!queue.size())
-		{
-			cv.wait(lk);
-		}
-		str = queue.front();
-		queue.pop();
+        std::unique_lock<std::mutex> lk(mx_ready_rw);
+        if (!queue.size())
+        {
+            cv.wait(lk);
+        }
+        str = queue.front();
+        queue.pop();
     }
 }

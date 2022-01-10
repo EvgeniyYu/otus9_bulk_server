@@ -11,17 +11,17 @@
 
 class CommandQueue
 {
-	std::queue<std::string> queue;
-	std::mutex mx_ready_rw;
-	std::condition_variable cv;
-	std::ofstream ofs;
+    std::queue<std::string> queue;
+    std::mutex mx_ready_rw;
+    std::condition_variable cv;
+    std::ofstream ofs;
 public:
-	CommandQueue() {}
-	~CommandQueue() {}
+    CommandQueue() {}
+    ~CommandQueue() {}
 
-	size_t size() const;
-	void push_back(const std::string& str);
-	void get_front(std::string& str);
+    size_t size() const;
+    void push_back(const std::string& str);
+    void get_front(std::string& str);
 };
 
 #endif // COMMAND_QUEUE_H_INCLUDED

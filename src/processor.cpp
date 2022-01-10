@@ -51,7 +51,7 @@ void Processor::stop_log_context(void* handle)
     connect_count--;
     if (!connect_count)
     {
-    	//ctrl->stop();
+        //ctrl->stop();
         ctrl->join();
     }
 
@@ -90,8 +90,8 @@ unsigned Processor::getRandomHandle()
     unsigned value;
     while (1)
     {
-    	value = g();
-    	if (log_contexts.find(value) == log_contexts.end()) break;
-	}
-	return value;
+        value = g();
+        if (log_contexts.find(value) == log_contexts.end()) break;
+    }
+    return value;
 }

@@ -12,49 +12,50 @@
 class LoggerView
 {
 protected:
-	CommandQueue cmd_queue;
-	size_t size;
+    CommandQueue cmd_queue;
+    size_t size;
 public:
-	virtual void update(const std::string&) = 0;
-	virtual void start() = 0;
-	virtual void stop()= 0;
-	virtual void join() = 0;
+    virtual void update(const std::string&) = 0;
+    virtual void start() = 0;
+    virtual void stop()= 0;
+    virtual void join() = 0;
+    virtual ~LoggerView() {}
 };
 
 
 class ConsoleView: public LoggerView
 {
-	std::thread th;
-	std::atomic<bool> started{false};
+    std::thread th;
+    std::atomic<bool> started{false};
 public:
-	ConsoleView(size_t _size);
-	void update(const std::string&) override;
-	void start() override;
-	void stop() override;
-	void join() override;
+    ConsoleView(size_t _size);
+    void update(const std::string&) override;
+    void start() override;
+    void stop() override;
+    void join() override;
 private:
-	void write(const std::string&);
+    void write(const std::string&);
 };
 
 
 class FileView: public LoggerView
 {
-	std::vector<std::thread> threads;
-	size_t threads_count;
-	std::atomic<bool> started{false};
-	std::mutex mx_write;
-	std::ofstream ofs;
-	std::stringstream sstr;
+    std::vector<std::thread> threads;
+    size_t threads_count;
+    std::atomic<bool> started{false};
+    std::mutex mx_write;
+    std::ofstream ofs;
+    std::stringstream sstr;
 public:
-	FileView(size_t _threads_count, size_t _size);
-	void update(const std::string&) override;
-	void start() override;
-	void stop() override;
-	void join() override;
+    FileView(size_t _threads_count, size_t _size);
+    void update(const std::string&) override;
+    void start() override;
+    void stop() override;
+    void join() override;
 private:
-	void write(const std::string&);
-	void save_bulk(const std::string& str);
-	void create_file();
+    void write(const std::string&);
+    void save_bulk(const std::string& str);
+    void create_file();
 };
 
 

@@ -19,17 +19,16 @@ BOOST_AUTO_TEST_CASE(test_result)
 {
 
     //remove all files in Log directory
-	const std::string dir_name = "Log";
-	std::string dir_path = fs::current_path() / dir_name;
-	fs::directory_entry entry_dir { dir_path };
+    const std::string dir_name = "Log";
+    std::string dir_path = fs::current_path() / dir_name;
+    fs::directory_entry entry_dir { dir_path };
     if (entry_dir.exists())
     {
-    	fs::remove_all(dir_path);
+        fs::remove_all(dir_path);
     }
-	//
 
-	//free port 9000
-	system("fuser -k 9000/tcp");
+    //free port 9000
+    system("fuser -k 9000/tcp");
 
     std::thread th_server([]()
     {
@@ -52,17 +51,17 @@ BOOST_AUTO_TEST_CASE(test_result)
 
     //now we have only one file in Log directory and we can read it
     auto dirIter = std::filesystem::directory_iterator(dir_path);
-	std::set<int> res;
-	std::set<int>::iterator it;
+    std::set<int> res;
+    std::set<int>::iterator it;
     for (const auto & entry : fs::directory_iterator(dir_path))
     {
-    	std::ifstream ifs(entry.path());
-    	BOOST_CHECK(ifs.is_open() == true);		//log file must be open for reading
-    	while (ifs)
-    	{
+        std::ifstream ifs(entry.path());
+        BOOST_CHECK(ifs.is_open() == true);		//log file must be open for reading
+        while (ifs)
+        {
 
-    		std::string s;
-    		std::getline(ifs, s);
+            std::string s;
+            std::getline(ifs, s);
 
             const std::string expr = "bulk:";
             std::size_t found = s.find(expr);
@@ -74,16 +73,16 @@ BOOST_AUTO_TEST_CASE(test_result)
             {
                 continue;
             }
-    		std::vector<std::string> v_values;
-    		boost::split(v_values, s, boost::is_any_of(","));
-    		for (auto& val: v_values)
-    		{
+            std::vector<std::string> v_values;
+            boost::split(v_values, s, boost::is_any_of(","));
+            for (auto& val: v_values)
+            {
                 boost::algorithm::trim(val);
                 int _val = std::atoi(val.c_str());
                 res.insert(_val);
             }
 
-    	}
+        }
     }
 
     std::set<int> res_true {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};

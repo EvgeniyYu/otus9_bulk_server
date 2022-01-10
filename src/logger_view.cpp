@@ -19,31 +19,29 @@ ConsoleView::ConsoleView(size_t _size)
 
 void ConsoleView::start()
 {
-	if (started) return;
-	started = true;
-	th = std::thread ([&]()
-	{
-		while (1)
-		{
-			if (!started && !cmd_queue.size()) break;
-			{
-				std::string str_cmd;
-				this->cmd_queue.get_front(str_cmd);
-				write(str_cmd);
-			}
-			std::this_thread::sleep_for(std::chrono::milliseconds(10));
-		}
-	});
+    if (started) return;
+    started = true;
+    th = std::thread ([&]()
+        {
+            while (1)
+            {
+                if (!started && !cmd_queue.size()) break;
+                std::string str_cmd;
+                this->cmd_queue.get_front(str_cmd);
+                write(str_cmd);
+                std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            }
+        });
 }
 
 void ConsoleView::stop()
 {
-	started = false;
+    started = false;
 }
 
 void ConsoleView::join()
 {
-	th.join();
+    th.join();
 }
 
 
@@ -67,7 +65,7 @@ void ConsoleView::write(const std::string& str)
 
 void ConsoleView::update(const std::string& str)
 {
-	this->cmd_queue.push_back(str);
+    this->cmd_queue.push_back(str);
 }
 
 
@@ -80,43 +78,42 @@ FileView::FileView(size_t _threads_count, size_t _size): threads_count(_threads_
 
 void FileView::update(const std::string& str)
 {
-	cmd_queue.push_back(str);
+    cmd_queue.push_back(str);
 }
 
 void FileView::start()
 {
 
-	if (started) return;
-	started = true;
-	for (size_t i = 0; i < threads_count; i++)
-		threads.emplace_back([&]()
-		{
-			while (1)
-			{
-				if (!started && !cmd_queue.size()) break;
-				{
-					std::string str_cmd;
+    if (started) return;
+    started = true;
+    for (size_t i = 0; i < threads_count; i++)
+        threads.emplace_back([&]()
+            {
+                while (1)
+                {
+                    if (!started && !cmd_queue.size()) break;
+                    std::string str_cmd;
 
-					this->cmd_queue.get_front(str_cmd);
+                    this->cmd_queue.get_front(str_cmd);
 
-					write(str_cmd);
-				}
-				std::this_thread::sleep_for(std::chrono::milliseconds(10));
-			}
-		});
+                    write(str_cmd);
+                }
+                std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            }
+        });
 }
 
 void FileView::stop()
 {
-	started = false;
+    started = false;
 }
 
 void FileView::join()
 {
-	for (auto& th: threads)
-	{
-		th.join();
-	}
+    for (auto& th: threads)
+    {
+        th.join();
+    }
 }
 
 void FileView::write(const std::string& str)
@@ -150,21 +147,21 @@ void FileView::write(const std::string& str)
 void FileView::create_file()
 {
     const std::string dir_name = "Log";
-	std::string dir_path = fs::current_path() / dir_name;
-	fs::directory_entry entry_dir { dir_path };
+    std::string dir_path = fs::current_path() / dir_name;
+    fs::directory_entry entry_dir { dir_path };
     if (!entry_dir.exists())
     {
         if (!fs::create_directory(dir_path))
         {
-        	throw std::runtime_error("Error creating log directory");
-    	}
+            throw std::runtime_error("Error creating log directory");
+        }
     }
 
     static size_t cnt = 0;
     std::time_t result = std::time(nullptr);
     std::stringstream sstr_name;
     sstr_name << dir_name <<"/log_" << result << "_" << ++cnt;
-	std::string fname = sstr_name.str();
+    std::string fname = sstr_name.str();
     ofs.open(fname, std::ios::app);
     if (!ofs.is_open())
     {

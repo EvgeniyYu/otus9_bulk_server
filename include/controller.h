@@ -8,32 +8,34 @@
 class Observable
 {
 public:
-	void add_observer(std::shared_ptr<LoggerView> sptr_obs);
-	void notify(const std::string& str);
+    void add_observer(std::shared_ptr<LoggerView> sptr_obs);
+    void notify(const std::string& str);
+    virtual ~Observable() {}
 protected:
-	std::vector<std::shared_ptr<LoggerView>> observers;
+    std::vector<std::shared_ptr<LoggerView>> observers;
 };
 
 
 class IController: public Observable
 {
 public:
-	virtual void add_blocks(std::string& str_block) = 0;
-	virtual void add_string(std::string& str) = 0;
-	virtual void join() = 0;
-	virtual void stop() = 0;
+    virtual void add_blocks(std::string& str_block) = 0;
+    virtual void add_string(std::string& str) = 0;
+    virtual void join() = 0;
+    virtual void stop() = 0;
+    virtual ~IController() {}
 };
 
 class Controller: public IController
 {
-	std::shared_ptr<LoggerView> cview;
-	std::shared_ptr<LoggerView> fview;
+    std::shared_ptr<LoggerView> cview;
+    std::shared_ptr<LoggerView> fview;
 public:
-	Controller(const size_t wf_thread_count, const size_t size);
-	void add_blocks(std::string& str_block) override;
-	void add_string(std::string& str) override;
-	void join() override;
-	void stop() override;
+    Controller(const size_t wf_thread_count, const size_t size);
+    void add_blocks(std::string& str_block) override;
+    void add_string(std::string& str) override;
+    void join() override;
+    void stop() override;
 };
 
 
