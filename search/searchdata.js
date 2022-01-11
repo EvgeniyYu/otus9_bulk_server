@@ -3,11 +3,12 @@ var indexSectionsWithContent =
   0: "abcdefghijlmnoprstu~",
   1: "acfilops",
   2: "a",
-  3: "aclmpst",
+  3: "aclmprst",
   4: "abcdefgijlmnprsu~",
   5: "cfos",
   6: "h",
-  7: "b"
+  7: "b",
+  8: "o"
 };
 
 var indexSectionNames =
@@ -19,7 +20,8 @@ var indexSectionNames =
   4: "functions",
   5: "variables",
   6: "typedefs",
-  7: "defines"
+  7: "defines",
+  8: "pages"
 };
 
 var indexSectionLabels =
@@ -31,6 +33,7 @@ var indexSectionLabels =
   4: "Functions",
   5: "Variables",
   6: "Typedefs",
-  7: "Macros"
+  7: "Macros",
+  8: "Pages"
 };
 
